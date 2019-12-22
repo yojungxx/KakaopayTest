@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.mapper.CusDeMapper">
+    <select id="getMostCusInf" resultType="com.test.dto.MostCusDTO">
+        select year, name, acctno, sumamt
+		from (
+			select year, name, acctno, sumamt
+			        , rank() over (partition by year order by sumAmt desc)  as rank
+			from (
+				select substr(a.dedt,1,4) as year
+				        , b.name
+				        , a.acctno
+				        , sum(a.sl_am - a.fe_am) as sumAmt
+				from  hyo_tb_de_iz a
+				       , hyo_tb_acct_inf b
+				where a.acctno = b.acctno
+				and     a.can_yn = 'N'
+				group by substr(a.dedt,1,4) , b.name, a.acctno
+			) 
+		)
+		where rank = 1
+    </select>
+    <select id="getDeNoneCusInf" resultType="com.test.dto.DeNoneDTO">
+        select '2018' as year, name, acctno
+		from hyo_tb_acct_inf a
+		where not exists (select 1 
+		                            from hyo_Tb_de_iz b 
+		                            where substr(b.dedt,1,4) = '2018'
+		                            and can_yn = 'N'
+		                            and a.acctno = b.acctno)
+		union all
+		
+		select '2019' as year, name, acctno
+		from hyo_tb_acct_inf a
+		where not exists (select 1 
+		                            from hyo_Tb_de_iz b 
+		                            where substr(b.dedt,1,4) = '2019'
+		                            and can_yn = 'N'
+		                            and a.acctno = b.acctno)
+    </select>
+    <select id="getYearDeSumMngInf" resultType="com.test.dto.YearDeSumMngDTO">
+        select substr(a.dedt,1,4) as year
+		       , b.brname
+		       , b.brcode
+		       , sum(a.sl_am) as sumAmt
+		from hyo_tb_de_iz a
+		      , hyo_tb_mng_inf b
+		      , hyo_tb_acct_inf c
+		where a.acctno = c.acctno
+		and    c.brcode = b.brcode
+		and    a.can_yn = 'N'
+		group by substr(a.dedt,1,4), b.brname, b.brcode
+		order by substr(a.dedt,1,4), sum(sl_am) desc
+    </select>
+    <select id="getDeSumMngInf" resultType="com.test.dto.DeSumMngDTO">
+		select a.brname, a.brcode, sum(c.sl_am) sumamt
+		from hyo_tb_mng_inf a
+		      , hyo_tb_acct_inf b
+		      , hyo_tb_de_iz c
+		where  a.brname = #{mng}
+		and    decode(b.brcode,'B','A',b.brcode) = a.brcode
+		and    b.acctno = c.acctno
+		and    c.can_yn = 'N'
+		group by a.brname, a.brcode
+    </select>
+</mapper>
