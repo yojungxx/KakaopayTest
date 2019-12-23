@@ -10,9 +10,9 @@ public class MostCusDTO {
 	@JsonProperty("name")
 	private String name;
 	
-	@JsonProperty("acctno")
+	@JsonProperty("acctNo")
 	private String acctno;
 	
-	@JsonProperty("sumamt")
+	@JsonProperty("sumAmt")
 	private int sumamt;
 }

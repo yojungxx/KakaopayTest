@@ -7,13 +7,26 @@ public class YearDeSumMngDTO {
 	@JsonProperty("year")
 	private int year;
 	
-	@JsonProperty("brname")
+	@JsonProperty("brName")
 	private String brname;
 	
-	@JsonProperty("brcode")
+	@JsonProperty("brCode")
 	private String brcode;
 	
 	@JsonProperty("sumAmt")
-	private int sumAmt;
+	private int sumamt;
+	
+	public int getYear() {
+        return this.year;
+    }
+	public String getBrname() {
+        return this.brname;
+    }
+	public String getBrcode() {
+        return this.brcode;
+    }
+	public int getSumamt() {
+        return this.sumamt;
+    }
 	
 }

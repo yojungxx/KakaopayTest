@@ -10,6 +10,6 @@ public class DeNoneDTO {
 	@JsonProperty("name")
 	private String name;
 	
-	@JsonProperty("acctno")
+	@JsonProperty("acctNo")
 	private String acctno;
 }

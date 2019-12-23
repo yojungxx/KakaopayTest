@@ -2,7 +2,7 @@ package com.test.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DeSumMngDTO {
+public class YearDeSumMng2DTO {
 	
 	@JsonProperty("brName")
 	private String brname;
@@ -12,4 +12,13 @@ public class DeSumMngDTO {
 	
 	@JsonProperty("sumAmt")
 	private int sumamt;
+	
+	public YearDeSumMng2DTO() {
+		
+	}
+	public YearDeSumMng2DTO(String brname, String brcode, int sumamt) {
+		this.brname = brname;
+		this.brcode = brcode;
+		this.sumamt = sumamt;
+	}
 }
